@@ -3,7 +3,7 @@ using ObjectMapper;
 
 namespace ObjectMapperTests
 {
-    public class SimpleTests
+    public class PrimitiveTests
     {
         private IObjectMapper _mapper;
 
