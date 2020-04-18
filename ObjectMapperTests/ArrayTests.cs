@@ -15,30 +15,30 @@ namespace ObjectMapperTests
         }
 
         [Test]
-        public void SimpleArrayNotSame()
+        public void PrimitiveArrayNotSame()
         {
-            var a = new SimpleA { Simple = new int[0] };
-            var b = _mapper.map<SimpleB>(a);
-            Assert.AreNotSame(b.Simple, a.Simple);
+            var a = new PrimitiveA { Primitive = new int[0] };
+            var b = _mapper.map<PrimitiveB>(a);
+            Assert.AreNotSame(b.Primitive, a.Primitive);
         }
 
         [Test]
-        public void SimpleArrayCopied()
+        public void PrimitiveArrayCopied()
         {
-            var a = new SimpleA { Simple = new[] { 1, 2, 3, 4 } };
-            var b = _mapper.map<SimpleB>(a);
-            for (var i = 0; i < a.Simple.Length; i++)
-                Assert.AreEqual(a.Simple[i], b.Simple[i]);
+            var a = new PrimitiveA { Primitive = new[] { 1, 2, 3, 4 } };
+            var b = _mapper.map<PrimitiveB>(a);
+            for (var i = 0; i < a.Primitive.Length; i++)
+                Assert.AreEqual(a.Primitive[i], b.Primitive[i]);
         }
 
-        private class SimpleA
+        private class PrimitiveA
         {
-            public int[] Simple { get; set; }
+            public int[] Primitive { get; set; }
         }
 
-        private class SimpleB
+        private class PrimitiveB
         {
-            public int[] Simple { get; set; }
+            public int[] Primitive { get; set; }
         }
     }
 }
