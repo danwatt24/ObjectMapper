@@ -4,6 +4,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
+/*
+ * TODO LIST:
+ *      provide methods to "pre-register" mapping types
+ *      create memoized version of property getters and setters
+ *          to avoid having to use reflection every time. (this dependent on the previous item)
+ *      figure out how to return a builder object to allow for custom mappings (CustomMappingTests)
+ *      create benchmark "tests" to compare to automapper
+*/
 namespace ObjectMapper
 {
     public class ObjectMapper : IObjectMapper
@@ -44,8 +52,8 @@ namespace ObjectMapper
             return dest;
         }
 
-        protected object ArrayCopy(object arr) => ArrayCopy((Array)arr);
-        protected Array ArrayCopy(Array arr)
+        private object ArrayCopy(object arr) => ArrayCopy((Array)arr);
+        private Array ArrayCopy(Array arr)
         {
             var type = arr.GetType();
             var elementType = type.GetElementType();
@@ -64,7 +72,7 @@ namespace ObjectMapper
             return nArr;
         }
 
-        protected Func<object> GetCreator(Type t)
+        private Func<object> GetCreator(Type t)
         {
             if (!Creators.ContainsKey(t))
                 // https://stackoverflow.com/a/29972767/6038906
