@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ObjectMapperTests
 {
-    public class CustomMapping
+    public class CustomMappingTests
     {
     }
 }

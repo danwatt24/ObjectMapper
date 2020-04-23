@@ -6,6 +6,7 @@ namespace ObjectMapper
 {
     public interface IObjectMapper
     {
-        T map<T>(object simpleA) where T : new();
+        Dest Map<Dest>(object source);
+        object Map(object source, Type mapTo);
     }
 }

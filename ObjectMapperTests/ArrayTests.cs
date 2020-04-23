@@ -1,7 +1,10 @@
 ﻿using NUnit.Framework;
+using ObjectMapperTests.Factories;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static ObjectMapperTests.Objects.Arrays;
+using static ObjectMapperTests.Objects.Objects;
 
 namespace ObjectMapperTests
 {
@@ -17,16 +20,16 @@ namespace ObjectMapperTests
         [Test]
         public void PrimitiveArrayNotSame()
         {
-            var a = new PrimitiveA { Primitive = new int[0] };
-            var b = _mapper.map<PrimitiveB>(a);
+            var a = new SimpleArrayA { Primitive = new int[0] };
+            var b = _mapper.Map<SimpleArrayA>(a);
             Assert.AreNotSame(b.Primitive, a.Primitive);
         }
 
         [Test]
         public void PrimitiveArrayCopied()
         {
-            var a = new PrimitiveA { Primitive = new[] { 1, 2, 3, 4 } };
-            var b = _mapper.map<PrimitiveB>(a);
+            var a = new SimpleArrayA { Primitive = new[] { 1, 2, 3, 4 } };
+            var b = _mapper.Map<SimpleArrayB>(a);
             for (var i = 0; i < a.Primitive.Length; i++)
                 Assert.AreEqual(a.Primitive[i], b.Primitive[i]);
         }
@@ -34,24 +37,22 @@ namespace ObjectMapperTests
         [Test]
         public void DestArrayNotAssignable()
         {
-            var a = new PrimitiveA { Primitive = new int[0] };
-            var c = _mapper.map<PrimitiveC>(a);
+            var a = new SimpleArrayA { Primitive = new int[0] };
+            var c = _mapper.Map<SimpleArrayC>(a);
             Assert.IsNull(c.Primitive);
         }
 
-        private class PrimitiveA
+        [Test]
+        public void ArrayOfObjects()
         {
-            public int[] Primitive { get; set; }
-        }
-
-        private class PrimitiveB
-        {
-            public int[] Primitive { get; set; }
-        }
-
-        private class PrimitiveC
-        {
-            public string[] Primitive { get; set; }
+            var a = new ObjectArrayA { ObjectA = new[] { ObjectFactory.MakeObjectA() } };
+            var b = _mapper.Map<ObjectArrayB>(a);
+            for (var i = 0; i < a.ObjectA.Length; i++)
+            {
+                var expected = a.ObjectA[i];
+                var actual = b.ObjectA[i];
+                ObjectAIsSame(expected, actual);
+            }
         }
     }
 }

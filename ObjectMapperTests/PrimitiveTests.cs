@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using ObjectMapper;
+using static ObjectMapperTests.Objects.Objects;
 
 namespace ObjectMapperTests
 {
@@ -16,28 +17,28 @@ namespace ObjectMapperTests
         [Test]
         public void NullSource()
         {
-            var primitiveB = _mapper.map<PrimitiveB>(null);
+            var primitiveB = _mapper.Map<SimpleObjectB>(null);
             Assert.IsNull(primitiveB);
         }
 
         [Test]
         public void ReturnsBasicObject()
         {
-            var primitiveA = new PrimitiveA();
-            var primitiveB = _mapper.map<PrimitiveB>(primitiveA);
+            var primitiveA = new SimpleObjectA();
+            var primitiveB = _mapper.Map<SimpleObjectB>(primitiveA);
             Assert.IsNotNull(primitiveB);
-            Assert.AreEqual(primitiveB.GetType(), typeof(PrimitiveB));
+            Assert.AreEqual(primitiveB.GetType(), typeof(SimpleObjectB));
         }
 
         [Test]
         public void WithValue()
         {
-            var primitiveA = new PrimitiveA { Primitive = 1 };
-            var primitiveB = _mapper.map<PrimitiveB>(primitiveA);
+            var primitiveA = new SimpleObjectA { Primitive = 1 };
+            var primitiveB = _mapper.Map<SimpleObjectB>(primitiveA);
             Assert.AreEqual(primitiveA.Primitive, primitiveB.Primitive);
 
             primitiveA.Primitive = 13;
-            var primitiveC = _mapper.map<PrimitiveB>(primitiveA);
+            var primitiveC = _mapper.Map<SimpleObjectB>(primitiveA);
             Assert.AreEqual(primitiveA.Primitive, primitiveC.Primitive);
             Assert.AreNotEqual(primitiveB.Primitive, primitiveC.Primitive);
         }
@@ -45,68 +46,39 @@ namespace ObjectMapperTests
         [Test]
         public void MissingDestProp()
         {
-            var primitiveC = new PrimitiveC();
-            var primitiveA = _mapper.map<PrimitiveA>(primitiveC);
+            var primitiveC = new SimpleC();
+            var primitiveA = _mapper.Map<SimpleObjectA>(primitiveC);
             Assert.AreEqual(primitiveC.Primitive, primitiveA.Primitive);
         }
 
         [Test]
         public void MissingDestPropWithValues()
         {
-            var primitiveC = new PrimitiveC { Primitive = 32, HereOnly = 12 };
-            var primitiveA = _mapper.map<PrimitiveA>(primitiveC);
+            var primitiveC = new SimpleC { Primitive = 32, HereOnly = 12 };
+            var primitiveA = _mapper.Map<SimpleObjectA>(primitiveC);
             Assert.AreEqual(primitiveC.Primitive, primitiveA.Primitive);
         }
 
         [Test]
         public void SkipsUnassignable()
         {
-            var primitiveD = new PrimitiveD { Primitive = "blah" };
-            var primitiveA = _mapper.map<PrimitiveA>(primitiveD);
+            var primitiveD = new SimpleObjectD { Primitive = "blah" };
+            var primitiveA = _mapper.Map<SimpleObjectA>(primitiveD);
             Assert.NotNull(primitiveA);
         }
 
         [Test]
         public void PropMismatch()
         {
-            var hasProps = new HasMoreProps { Blah = "blah", Meh = 10f, Primitive = 12, SomeOther = "other", YetAnother = "yet" };
-            var primitiveA = _mapper.map<PrimitiveA>(hasProps);
+            var hasProps = new ObjectA { Blah = "blah", Meh = 10f, Primitive = 12, SomeOther = "other", YetAnother = "yet" };
+            var primitiveA = _mapper.Map<SimpleObjectA>(hasProps);
             Assert.AreEqual(hasProps.Primitive, primitiveA.Primitive);
 
-            primitiveA = new PrimitiveA { Primitive = 76 };
-            hasProps = _mapper.map<HasMoreProps>(primitiveA);
+            primitiveA = new SimpleObjectA { Primitive = 76 };
+            hasProps = _mapper.Map<ObjectA>(primitiveA);
             Assert.AreEqual(primitiveA.Primitive, hasProps.Primitive);
             Assert.AreEqual(default(float), hasProps.Meh);
             Assert.AreEqual(default(string), hasProps.Blah);
-        }
-
-        private class PrimitiveA
-        {
-            public int Primitive { get; set; }
-        }
-
-        private class PrimitiveB
-        {
-            public int Primitive { get; set; }
-        }
-
-        private class PrimitiveC : PrimitiveA
-        {
-            public int HereOnly { get; set; }
-        }
-
-        private class PrimitiveD
-        {
-            public string Primitive { get; set; }
-        }
-
-        private class HasMoreProps
-        {
-            public int Primitive { get; set; }
-            public string Blah { get; set; }
-            public float Meh { get; set; }
-            public string SomeOther { get; set; }
-            public string YetAnother { get; set; }
         }
     }
 }
