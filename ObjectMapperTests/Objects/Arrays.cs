@@ -31,5 +31,15 @@ namespace ObjectMapperTests.Objects
         {
             public ObjectA[] ObjectA { get; set; }
         }
+
+        public class Simple2dArrayA
+        {
+            public int[][] Primitive { get; set; }
+        }
+
+        public class Simple2dArrayB
+        {
+            public int[][] Primitive { get; set; }
+        }
     }
 }

@@ -54,5 +54,24 @@ namespace ObjectMapperTests
                 ObjectAIsSame(expected, actual);
             }
         }
+
+        [Test]
+        public void Simple2dArray()
+        {
+            var array2d = new int[1][];
+            array2d[0] = new[] { 1 };
+            var a = new Simple2dArrayA { Primitive = array2d };
+            var b = _mapper.Map<Simple2dArrayB>(a);
+            for (var i = 0; i < a.Primitive.Length; i++)
+            {
+                var arrExpected = a.Primitive[i];
+                var arrActual = b.Primitive[i];
+                Assert.AreNotSame(arrExpected, arrActual);
+                for (var j = 0; j < arrExpected.Length; j++)
+                {
+                    Assert.AreEqual(arrExpected[j], arrActual[j]);
+                }
+            }
+        }
     }
 }
